@@ -1,5 +1,5 @@
-import 'package:tgm/tgm.dart' as tgm;
+import 'package:tgm/main.dart';
 
-void main(List<String> arguments) {
-  print('Hello world: ${tgm.calculate()}!');
+void main(List<String> arguments) async {
+  await run();
 }
