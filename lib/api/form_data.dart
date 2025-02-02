@@ -15,4 +15,8 @@ class FormData {
   String getStringValue(String name) {
     return _data[name]!;
   }
+
+  double getDoubleValue(String name) {
+    return double.parse(_data[name]!);
+  }
 }

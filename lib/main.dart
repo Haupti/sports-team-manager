@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:tgm/api/api_service.dart';
+import 'package:tgm/domain/transaction/transaction_info_service.dart';
 import 'package:tgm/ui/component/member_manager.dart';
 import 'package:tgm/ui/component/overview.dart';
+import 'package:tgm/ui/component/transactions.dart';
 import 'package:tgm/ui/component/utilities.dart';
 import 'package:tgm/ui/html.dart';
 import 'package:tgm/ui/page/base_page.dart';
@@ -17,6 +19,12 @@ Future<void> run() async {
       case ("GET", "/member-manager"):
         request.respond(basePage(MemberManagerComponents.main()));
         break;
+      case ("GET", "/transactions"):
+        request.respond(basePage(TransactionComponents.history()));
+        break;
+      case ("GET", "/transactions-manager"):
+        request.respond(basePage(TransactionComponents.manageTransactions()));
+        break;
       case ("POST", "/api/add-member"):
         final member = await ApiService.addMember(request);
         request.respond(MemberManagerComponents.memberToRow(member));
@@ -25,6 +33,15 @@ Future<void> run() async {
         await ApiService.removeMember(request);
         request.respond(UtilityComponents.empty());
         break;
+      case ("POST", "/api/add-transaction"):
+        final transaction = await ApiService.addTransaction(request);
+        if (transaction == null) {
+          request.respondClientError();
+        } else {
+          final info = TransactionInfoService.toInfo(transaction);
+          request.respond(TransactionComponents.transactionToRow(info));
+        }
+        break;
     }
   }
 }
@@ -32,7 +49,13 @@ Future<void> run() async {
 extension on HttpRequest {
   void respond(HTML html) {
     response.headers.add("Content-Type", "text/html");
+    response.statusCode = 200;
     response.write(html.render());
+    response.close();
+  }
+
+  void respondClientError() {
+    response.statusCode = 400;
     response.close();
   }
 }

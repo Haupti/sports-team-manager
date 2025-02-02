@@ -5,6 +5,7 @@ HTML basePage(HTML main) {
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script></script>
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
@@ -16,8 +17,19 @@ HTML basePage(HTML main) {
       margin: auto;
       padding: 16px;
     }
-    nav > a {
+    nav a {
+      color: #017dc7;
       text-decoration: none;
+    }
+    nav a:visited {
+      color: #017dc7;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
     }
     table {
       width: 100%;
@@ -47,10 +59,14 @@ HTML basePage(HTML main) {
     }
   </style>
   <body>
-    <nav style="display: flex; gap: 8px; align-items: center;">
-      <a style="font-size: 36px;" href="/">&#127952;</a>
+    <nav>
+      <a style="font-size: 36px;" href="/">&#127952; TGM H4</a>
       <a href="/">Home</a>
-      <a href="/member-manager">Members</a>
+      <a href="/transactions">Fines</a>
+      <div>
+        <a href="/member-manager">Manage-Members</a>
+        <a href="/transactions-manager">Manage-Fines</a>
+      </div>
     </nav>
     <main>
       ${main.render()}
