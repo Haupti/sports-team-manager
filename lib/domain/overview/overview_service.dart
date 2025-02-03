@@ -1,22 +1,24 @@
 import 'package:tgm/domain/member_repository.dart';
 import 'package:tgm/domain/overview/member_info.dart';
 import 'package:tgm/domain/transaction/transaction_repository.dart';
+import 'package:tgm/domain/workout/workout_repository.dart';
 
 class OverviewService {
   static List<MemberInfo> getAllMemberInfos() {
     final transactions = TransactionRepository.getAll();
     final members = MemberRepository.getAll();
-    Map<String, MemberInfo> infos = {};
-    for (final t in transactions) {
-      if (infos[t.memberId] == null) {
-        infos[t.memberId] = MemberInfo(
-            members.firstWhere((it) => it.id == t.memberId), t.typedAmount, 0);
-        continue;
-      }
+    final workouts = WorkoutRepository.getAll();
 
-      infos[t.memberId]!.openFine += t.typedAmount;
+    List<MemberInfo> infos = [];
+
+    for (final member in members) {
+      final workoutsOfMember =
+          workouts.where((it) => it.memberId == member.id).toList();
+      final sum = transactions.fold<double>(
+          0.0, (prev, transaction) => prev + transaction.typedAmount);
+      infos.add(MemberInfo(member, sum, workoutsOfMember.length));
     }
 
-    return infos.values.toList();
+    return infos.toList();
   }
 }

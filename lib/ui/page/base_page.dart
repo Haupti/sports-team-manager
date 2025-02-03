@@ -72,6 +72,7 @@ HTML basePage(HTML main) {
       <div>
         <a class="navLink" href="/member-manager">Manage-Members</a>
         <a class="navLink" href="/transactions-manager">Manage-Fines</a>
+        <a class="navLink" href="/workout-manager">Manage-Workouts</a>
       </div>
     </nav>
     <main>

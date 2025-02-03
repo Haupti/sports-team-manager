@@ -6,6 +6,7 @@ import 'package:tgm/ui/component/member_manager.dart';
 import 'package:tgm/ui/component/overview.dart';
 import 'package:tgm/ui/component/transactions.dart';
 import 'package:tgm/ui/component/utilities.dart';
+import 'package:tgm/ui/component/workout_manager.dart';
 import 'package:tgm/ui/html.dart';
 import 'package:tgm/ui/page/base_page.dart';
 
@@ -25,6 +26,9 @@ Future<void> run() async {
       case ("GET", "/transactions-manager"):
         request.respond(basePage(TransactionComponents.manageTransactions()));
         break;
+      case ("GET", "/workout-manager"):
+        request.respond(basePage(WorkoutManagerComponents.main()));
+        break;
       case ("POST", "/api/add-member"):
         final member = await ApiService.addMember(request);
         request.respond(MemberManagerComponents.memberToRow(member));
@@ -43,8 +47,13 @@ Future<void> run() async {
           request.respondClientError();
         } else {
           final info = TransactionInfoService.toInfo(transaction);
-          request.respond(TransactionComponents.transactionToManagableRow(info));
+          request
+              .respond(TransactionComponents.transactionToManagableRow(info));
         }
+        break;
+      case ("POST", "/api/add-workout"):
+        await ApiService.addWorkout(request);
+        request.respond(UtilityComponents.empty());
         break;
     }
   }
