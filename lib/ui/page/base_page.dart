@@ -21,6 +21,12 @@ HTML basePage(HTML main) {
       color: #017dc7;
       text-decoration: none;
     }
+    .navLink {
+      padding: 8px;
+    }
+    .navLink:hover {
+      background-color: #cce5f3;
+    }
     nav a:visited {
       color: #017dc7;
     }
@@ -61,11 +67,11 @@ HTML basePage(HTML main) {
   <body>
     <nav>
       <a style="font-size: 36px;" href="/">&#127952; TGM H4</a>
-      <a href="/">Home</a>
-      <a href="/transactions">Fines</a>
+      <a class="navLink" href="/">Home</a>
+      <a class="navLink" class="navLink" href="/transactions">Fines</a>
       <div>
-        <a href="/member-manager">Manage-Members</a>
-        <a href="/transactions-manager">Manage-Fines</a>
+        <a class="navLink" href="/member-manager">Manage-Members</a>
+        <a class="navLink" href="/transactions-manager">Manage-Fines</a>
       </div>
     </nav>
     <main>
