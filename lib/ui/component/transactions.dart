@@ -21,6 +21,42 @@ class TransactionComponents {
 """);
   }
 
+  static HTML managableHistory() {
+    final transactions = TransactionInfoService.getAllNewestFirst();
+    return HTML("""
+<h1> Transaction History </h1>
+<table>
+  <tr id="transaction-history-headline">
+    <td>Delete</td>
+    <td>Affected Member</td>
+    <td>Type</td>
+    <td>Reason</td>
+    <td>Timestamp</td>
+  </tr>
+  ${transactions.map((it) => transactionToManagableRow(it).render()).join("\n")}
+</table>
+""");
+  }
+
+  static HTML transactionToManagableRow(TransactionInfo info) {
+    return HTML("""
+<tr id="managable-transaction-row-${info.transaction.id}">
+  <td><button
+    hx-post="/api/delete-transaction"
+    hx-swap="outerHTML"
+    hx-target="#managable-transaction-row-${info.transaction.id}"
+    hx-vals='{"id":"${info.transaction.id}"}'
+  >
+    &#128465;
+  </button></td>
+  <td>${info.memberName}</td>
+  <td>${info.type.name}</td>
+  <td>${info.reason}</td>
+  <td>${info.timestamp.toIso8601String().split("T")[0]}</td>
+</tr>
+      """);
+  }
+
   static HTML transactionToRow(TransactionInfo info) {
     return HTML("""
 <tr>
@@ -100,7 +136,7 @@ class TransactionComponents {
   </div>
   <input style="margin-top: 8px;" type="submit" value="Submit"/>
 </form>
-${history().render()}
+${managableHistory().render()}
 """);
   }
 }

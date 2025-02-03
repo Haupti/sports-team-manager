@@ -49,4 +49,9 @@ class ApiService {
     print(body);
     return FormData.from(body);
   }
+
+  static removeTransaction(HttpRequest request) async {
+    final formData = await _formData(request);
+    TransactionRepository.delete(formData.getStringValue("id"));
+  }
 }

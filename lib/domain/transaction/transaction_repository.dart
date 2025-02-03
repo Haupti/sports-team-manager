@@ -10,4 +10,8 @@ class TransactionRepository {
   static void add(Transaction t) {
     _transactions.add(t);
   }
+
+  static void delete(String id) {
+    _transactions = _transactions.where((it) => id != it.id).toList();
+  }
 }

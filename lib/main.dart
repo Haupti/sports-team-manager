@@ -33,13 +33,17 @@ Future<void> run() async {
         await ApiService.removeMember(request);
         request.respond(UtilityComponents.empty());
         break;
+      case ("POST", "/api/delete-transaction"):
+        await ApiService.removeTransaction(request);
+        request.respond(UtilityComponents.empty());
+        break;
       case ("POST", "/api/add-transaction"):
         final transaction = await ApiService.addTransaction(request);
         if (transaction == null) {
           request.respondClientError();
         } else {
           final info = TransactionInfoService.toInfo(transaction);
-          request.respond(TransactionComponents.transactionToRow(info));
+          request.respond(TransactionComponents.transactionToManagableRow(info));
         }
         break;
     }
