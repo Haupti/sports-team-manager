@@ -50,15 +50,28 @@ class TransactionComponents {
   <div>
     <h2> Type </h2>
     <div>
-      <input id="fine-type-input" name="type" value="fine" type="radio" checked="true"/>
+      <input 
+        id="fine-type-input"
+        name="type"
+        value="fine"
+        type="radio"
+        checked="true"
+        onchange="\$('#fine-type-input').is(':checked') ? \$('#fine-reason-section').css('display','block') : null;"
+      />
       <label for="fine-type-input">Fine</label>
     </div>
     <div>
-      <input id="settlement-type-input" name="type" type="radio" value="settlement"/>
+      <input
+          id="settlement-type-input"
+          name="type"
+          type="radio"
+          value="settlement"
+          onchange="\$('#settlement-type-input').is(':checked') ? \$('#fine-reason-section').css('display','none') : null;"
+      />
       <label for="settlement-type-input">Settlement</label>
     </div>
   </div>
-  <div>
+  <div id="fine-reason-section">
     <h2> Reason </h2>
     <div>
       <input id="reason-too-late" name="reason" type="radio" value="too-late" checked="true"/>

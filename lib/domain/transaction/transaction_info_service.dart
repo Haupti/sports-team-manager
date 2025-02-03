@@ -21,7 +21,7 @@ class TransactionInfoService {
               it,
             ))
         .toList();
-    transactions.sort((a, b) => a.timestamp.isBefore(b.timestamp) ? 0 : 1);
+    transactions.sort((a, b) => a.timestamp.isBefore(b.timestamp) ? 1 : 0);
     return transactions;
   }
 
