@@ -9,6 +9,7 @@ class TransactionRepository {
   static File _getDb() {
     if (!_db.existsSync()) {
       _db.createSync();
+      _db.writeAsStringSync("[]");
     }
     return _db;
   }
@@ -33,14 +34,16 @@ class TransactionRepository {
   }
 
   static void _saveAll(List<Transaction> transactions) {
-    final entities = transactions.map((it) => {
-          "id": it.id,
-          "timestamp": it.timestamp.toString(),
-          "memberId": it.memberId,
-          "amout": it.amount,
-          "reason": it.reason,
-          "type": it.type.key,
-        });
+    final entities = transactions
+        .map((it) => {
+              "id": it.id,
+              "timestamp": it.timestamp.toString(),
+              "memberId": it.memberId,
+              "amount": it.amount,
+              "reason": it.reason,
+              "type": it.type.key,
+            })
+        .toList();
     _getDb().writeAsStringSync(json.encode(entities));
   }
 

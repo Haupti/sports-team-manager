@@ -77,6 +77,7 @@ class TransactionComponents {
   <div style="margin-bottom: 8px;">
     <label for="affected-member">Affected Member</label>
     <select id="affected-member" name="member-id" style="width: 100%;">
+      <option value="--">--</option>
       ${members.map((it) => """<option value="${it.id}">${it.name}</option>""").join("\n")}
     </select>
   </div>

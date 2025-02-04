@@ -9,6 +9,7 @@ class WorkoutRepository {
   static File _getDb() {
     if (!_db.existsSync()) {
       _db.createSync();
+      _db.writeAsStringSync("[]");
     }
     return _db;
   }

@@ -9,6 +9,7 @@ class MemberRepository {
   static File _getDb() {
     if (!_db.existsSync()) {
       _db.createSync();
+      _db.writeAsStringSync("[]");
     }
     return _db;
   }
@@ -29,10 +30,12 @@ class MemberRepository {
   }
 
   static void _saveAll(List<Member> members) {
-    final entities = members.map((it) => {
-          "id": it.id,
-          "name": it.name,
-        });
+    final entities = members
+        .map((it) => {
+              "id": it.id,
+              "name": it.name,
+            })
+        .toList();
     _getDb().writeAsStringSync(json.encode(entities));
   }
 

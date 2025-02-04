@@ -1,3 +1,4 @@
+import 'package:tgm/domain/logger.dart';
 import 'package:tgm/domain/member.dart';
 import 'package:tgm/domain/member_repository.dart';
 import 'package:tgm/domain/workout/workout_info.dart';
@@ -15,8 +16,11 @@ class WorkoutInfoService {
 
     final List<WorkoutInfo> infos = [];
     for (final workout in workouts) {
-      infos.add(WorkoutInfo(workout,
-          member[workout.memberId] ?? Member.deleted(workout.memberId)));
+      infos.add(WorkoutInfo(
+          workout,
+          member[workout.memberId] ??
+              Logger.fallback("[WORKOUT INFO]: member ${workout.memberId} not found",
+                  Member.deleted(workout.memberId))));
     }
 
     return infos;

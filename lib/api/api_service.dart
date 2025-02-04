@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:tgm/api/form_data.dart';
+import 'package:tgm/domain/logger.dart';
 import 'package:tgm/domain/member.dart';
 import 'package:tgm/domain/member_repository.dart';
 import 'package:tgm/domain/transaction/transaction.dart';
@@ -26,6 +27,9 @@ class ApiService {
   static Future<Transaction?> addTransaction(HttpRequest request) async {
     final formData = await _formData(request);
     final type = formData.getStringValue("type");
+    if(formData.getStringValue("member-id") == "--"){
+      return null;
+    }
     Transaction t;
     try {
       switch (type) {
@@ -43,13 +47,13 @@ class ApiService {
       TransactionRepository.add(t);
       return t;
     } catch (e) {
+      Logger.error("[ADD-TRANSACTION]: error: $e");
       return null;
     }
   }
 
   static Future<FormData> _formData(HttpRequest request) async {
     final String body = await utf8.decodeStream(request);
-    print(body);
     return FormData.from(body);
   }
 
@@ -63,7 +67,10 @@ class ApiService {
     final memberId = formData.getStringValue("member-id");
     final workout = Workout.create(memberId);
     WorkoutRepository.add(workout);
-    return WorkoutInfo(workout,
-        MemberRepository.getById(memberId) ?? Member.deleted(memberId));
+    return WorkoutInfo(
+        workout,
+        MemberRepository.getById(memberId) ??
+            Logger.fallback("[ADD-WORKOUT]: $memberId not found",
+                Member.deleted(memberId)));
   }
 }
