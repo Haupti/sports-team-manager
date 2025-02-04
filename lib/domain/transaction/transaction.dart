@@ -1,18 +1,14 @@
 import 'dart:math';
 
 enum TransactionType {
-  fine,
-  settlement;
+  fine("fine"),
+  settlement("settlement");
+
+  final String key;
+  const TransactionType(this.key);
 
   static TransactionType? from(String value) {
-    switch (value) {
-      case "fine":
-        return TransactionType.fine;
-      case "settlement":
-        return TransactionType.settlement;
-      default:
-        return null;
-    }
+    return values.where((it) => value == it.key).firstOrNull;
   }
 }
 

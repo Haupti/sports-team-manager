@@ -6,9 +6,15 @@ import 'package:tgm/global.dart';
 
 class WorkoutRepository {
   static final File _db = File("${Global.dataPath}/workouts.json");
+  static File _getDb() {
+    if (!_db.existsSync()) {
+      _db.createSync();
+    }
+    return _db;
+  }
 
   static List<Workout> getAll() {
-    final List<dynamic> content = json.decode(_db.readAsStringSync());
+    final List<dynamic> content = json.decode(_getDb().readAsStringSync());
     return content
         .map((it) =>
             Workout(it["id"], it["memberId"], DateTime.parse(it["timestamp"])))
@@ -29,7 +35,7 @@ class WorkoutRepository {
               "timestamp": it.timestamp.toString(),
             })
         .toList();
-    _db.writeAsStringSync(json.encode(entities));
+    _getDb().writeAsStringSync(json.encode(entities));
   }
 
   static void delete(String id) {
