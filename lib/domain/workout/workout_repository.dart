@@ -1,17 +1,40 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:tgm/domain/workout/workout.dart';
+import 'package:tgm/global.dart';
 
 class WorkoutRepository {
-  static List<Workout> _workouts = [];
+  static final File _db = File("${Global.dataPath}/workouts.json");
 
   static List<Workout> getAll() {
-    return _workouts;
+    final List<dynamic> content = json.decode(_db.readAsStringSync());
+    return content
+        .map((it) =>
+            Workout(it["id"], it["memberId"], DateTime.parse(it["timestamp"])))
+        .toList();
   }
 
   static void add(Workout t) {
-    _workouts.add(t);
+    final all = getAll();
+    all.add(t);
+    _saveAll(all);
+  }
+
+  static void _saveAll(List<Workout> workouts) {
+    final entities = workouts
+        .map((it) => {
+              "id": it.id,
+              "memberId": it.memberId,
+              "timestamp": it.timestamp.toString(),
+            })
+        .toList();
+    _db.writeAsStringSync(json.encode(entities));
   }
 
   static void delete(String id) {
-    _workouts = _workouts.where((it) => id != it.memberId).toList();
+    List<Workout> all = getAll();
+    all = all.where((it) => id != it.memberId).toList();
+    _saveAll(all);
   }
 }
