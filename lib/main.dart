@@ -20,6 +20,9 @@ Future<void> run() async {
       case ("GET", "/member-manager"):
         request.respond(basePage(MemberManagerComponents.main()));
         break;
+      case ("GET", "/workouts"):
+        request.respond(basePage(WorkoutManagerComponents.overview()));
+        break;
       case ("GET", "/transactions"):
         request.respond(basePage(TransactionComponents.history()));
         break;
@@ -52,8 +55,8 @@ Future<void> run() async {
         }
         break;
       case ("POST", "/api/add-workout"):
-        await ApiService.addWorkout(request);
-        request.respond(UtilityComponents.empty());
+        final workoutInfo = await ApiService.addWorkout(request);
+        request.respond(WorkoutManagerComponents.infoToRow(workoutInfo));
         break;
     }
   }

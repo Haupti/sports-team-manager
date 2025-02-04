@@ -1,3 +1,4 @@
+import 'package:tgm/domain/date_utils.dart';
 import 'package:tgm/domain/member.dart';
 import 'package:tgm/domain/member_repository.dart';
 import 'package:tgm/domain/transaction/transaction_info.dart';
@@ -52,7 +53,7 @@ class TransactionComponents {
   <td>${info.memberName}</td>
   <td>${info.type.name}</td>
   <td>${info.reason}</td>
-  <td>${info.timestamp.toIso8601String().split("T")[0]}</td>
+  <td>${info.timestamp.prettyDate()}</td>
 </tr>
       """);
   }
@@ -63,7 +64,7 @@ class TransactionComponents {
   <td>${info.memberName}</td>
   <td>${info.type.name}</td>
   <td>${info.reason}</td>
-  <td>${info.timestamp.toIso8601String().split("T")[0]}</td>
+  <td>${info.timestamp.prettyDate()}</td>
 </tr>
       """);
   }

@@ -1,11 +1,14 @@
 import 'package:tgm/domain/member.dart';
 
-// TODO
 class MemberRepository {
   static List<Member> _members = [];
 
   static List<Member> getAll() {
     return _members;
+  }
+
+  static Member? getById(String id) {
+    return _members.where((it) => it.id == id).firstOrNull;
   }
 
   static add(Member member) {

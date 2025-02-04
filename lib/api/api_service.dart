@@ -7,6 +7,7 @@ import 'package:tgm/domain/member_repository.dart';
 import 'package:tgm/domain/transaction/transaction.dart';
 import 'package:tgm/domain/transaction/transaction_repository.dart';
 import 'package:tgm/domain/workout/workout.dart';
+import 'package:tgm/domain/workout/workout_info.dart';
 import 'package:tgm/domain/workout/workout_repository.dart';
 
 class ApiService {
@@ -57,9 +58,12 @@ class ApiService {
     TransactionRepository.delete(formData.getStringValue("id"));
   }
 
-  static Future<void> addWorkout(HttpRequest request) async {
+  static Future<WorkoutInfo> addWorkout(HttpRequest request) async {
     final formData = await _formData(request);
-    final id = formData.getStringValue("member-id");
-    WorkoutRepository.add(Workout.create(id));
+    final memberId = formData.getStringValue("member-id");
+    final workout = Workout.create(memberId);
+    WorkoutRepository.add(workout);
+    return WorkoutInfo(workout,
+        MemberRepository.getById(memberId) ?? Member.deleted(memberId));
   }
 }

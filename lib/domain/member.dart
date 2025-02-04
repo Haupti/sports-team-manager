@@ -9,4 +9,8 @@ class Member {
         "member-${Random().nextInt(999999999)}-${DateTime.now().millisecondsSinceEpoch}",
         name);
   }
+
+  static Member deleted(String id) {
+    return Member(id, "deleted");
+  }
 }

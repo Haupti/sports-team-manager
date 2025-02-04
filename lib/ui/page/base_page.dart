@@ -20,6 +20,7 @@ HTML basePage(HTML main) {
     nav a {
       color: #017dc7;
       text-decoration: none;
+      text-wrap: nowrap;
     }
     .navLink {
       padding: 8px;
@@ -69,7 +70,8 @@ HTML basePage(HTML main) {
       <a style="font-size: 36px;" href="/">&#127952; TGM H4</a>
       <a class="navLink" href="/">Home</a>
       <a class="navLink" class="navLink" href="/transactions">Fines</a>
-      <div>
+      <a class="navLink" class="navLink" href="/workouts">Workouts</a>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
         <a class="navLink" href="/member-manager">Manage-Members</a>
         <a class="navLink" href="/transactions-manager">Manage-Fines</a>
         <a class="navLink" href="/workout-manager">Manage-Workouts</a>
