@@ -64,6 +64,36 @@ HTML basePage(HTML main) {
         background-color: #e0e0e0;
       }
 
+      button, input[type="submit"] {
+        background-color: #dddddd;
+        box-shadow: 4px 4px 2px #eeeeee;
+        border: 0;
+        border-radius: 2px;
+        padding: 8px;
+      }
+
+      button:hover, input[type="submit"]:hover {
+        box-shadow: 2px 2px 0px #eeeeee;
+      }
+      
+      input {
+        border: 1px solid #e0e0e0;
+        border-radius: 2px; 
+        padding: 8px;
+      }
+
+      select {
+        border: 1px solid #e0e0e0;
+        border-radius: 2px; 
+        padding: 8px;
+      }
+
+      input[type="checkbox"] {
+        border: 1px solid #017dc7;
+        border-radius: 2px; 
+        padding: 8px;
+      }
+
       .fadeout {
         animation: fadeOut 3s forwards;
       }
