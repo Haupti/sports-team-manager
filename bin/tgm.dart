@@ -9,5 +9,13 @@ void main(List<String> arguments) async {
     throw "'DATA_PATH' not set";
   }
   Global.dataPath = dataPath;
+
+  String? domain;
+  if (arguments.isEmpty) {
+    domain = "localhost";
+  } else {
+    domain = arguments[0];
+  }
+  Global.domain = domain;
   await run();
 }

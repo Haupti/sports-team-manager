@@ -1,8 +1,5 @@
+import 'package:tgm/domain/login/authentication.dart';
 import 'package:tgm/ui/html.dart';
-
-HTML loginPage() {
-    return pageRoot();
-}
 
 HTML pageRoot(HTML body, HTML style) {
   return HTML("""
@@ -24,11 +21,11 @@ HTML pageRoot(HTML body, HTML style) {
 """);
 }
 
-HTML basePage(HTML main) {
-  return pageRoot(body(main), style());
+HTML basePage(HTML main, Authentication auth) {
+  return pageRoot(body(main, auth), style());
 }
 
-HTML body(HTML main) {
+HTML body(HTML main, Authentication auth) {
   return HTML("""
 <nav>
   <a style="font-size: 36px;" href="/">&#127952; TGM H4</a>
@@ -36,9 +33,9 @@ HTML body(HTML main) {
   <a class="navLink" class="navLink" href="/transactions">Fines</a>
   <a class="navLink" class="navLink" href="/workouts">Workouts</a>
   <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-    <a class="navLink" href="/member-manager">Manage-Members</a>
-    <a class="navLink" href="/transactions-manager">Manage-Fines</a>
-    <a class="navLink" href="/workout-manager">Manage-Workouts</a>
+    ${auth.level >= 5 ? """<a class="navLink" href="/member-manager">Manage-Members</a>""" : ""}
+    ${auth.level >= 2 ? """<a class="navLink" href="/transactions-manager">Manage-Fines</a> """ : ""}
+    ${auth.level >= 2 ? """<a class="navLink" href="/workout-manager">Manage-Workouts</a>""" : ""}
   </div>
 </nav>
 <main>
