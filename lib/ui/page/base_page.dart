@@ -33,9 +33,9 @@ HTML body(HTML main, Authentication auth) {
   <a class="navLink" class="navLink" href="/transactions">Fines</a>
   <a class="navLink" class="navLink" href="/workouts">Workouts</a>
   <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-    ${auth.level >= 5 ? """<a class="navLink" href="/member-manager">Manage-Members</a>""" : ""}
-    ${auth.level >= 2 ? """<a class="navLink" href="/transactions-manager">Manage-Fines</a> """ : ""}
-    ${auth.level >= 2 ? """<a class="navLink" href="/workout-manager">Manage-Workouts</a>""" : ""}
+    ${auth.isAdmin ? """<a class="navLink" href="/member-manager">Manage-Members</a>""" : ""}
+    ${auth.isAtLeastMod ? """<a class="navLink" href="/transactions-manager">Manage-Fines</a> """ : ""}
+    ${auth.isAtLeastMod ? """<a class="navLink" href="/workout-manager">Manage-Workouts</a>""" : ""}
   </div>
 </nav>
 <main>

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:tgm/domain/login/authentication.dart';
 import 'package:tgm/global.dart';
 
 class User {
@@ -21,13 +22,13 @@ class UserRepository {
     return users;
   }
 
-  static int getLevel(String secret) {
+  static Level getLevel(String secret) {
     final matches = _users.where((it) {
       return it.secret == secret;
     });
     if (matches.isEmpty) {
-      return 0;
+      return Level.unauthorized;
     }
-    return matches.first.level;
+    return Level.byKey(matches.first.level);
   }
 }

@@ -25,7 +25,7 @@ Future<void> run() async {
     }
 
     final auth = Authentication.from(request.headers);
-    if (auth.level < 1) {
+    if (auth.isUnauthorized) {
       request.respond(loginPage());
       continue;
     }
@@ -39,44 +39,23 @@ Future<void> run() async {
       case ("GET", "/transactions"):
         request.respond(basePage(TransactionComponents.history(), auth));
         break;
-      case ("POST", "/api/add-transaction"):
-        if (auth.level < 2) {
-          request.forbidden();
-        } else {
-          final transaction = await ApiService.addTransaction(request);
-          if (transaction == null) {
-            request.respondClientError();
-          } else {
-            final info = TransactionInfoService.toInfo(transaction);
-            request
-                .respond(TransactionComponents.transactionToManagableRow(info));
-          }
-        }
-        break;
-      case ("POST", "/api/add-workout"):
-        if (auth.level < 2) {
-          request.forbidden();
-        } else {
-          final workoutInfo = await ApiService.addWorkout(request);
-          request.respond(WorkoutManagerComponents.infoToRow(workoutInfo));
-        }
-        break;
       case ("GET", "/transactions-manager"):
-        if (auth.level < 2) {
+        if (!auth.isAtLeastMod) {
           request.forbidden();
         } else {
-          request.respond(basePage(TransactionComponents.manageTransactions(), auth));
+          request.respond(
+              basePage(TransactionComponents.manageTransactions(), auth));
         }
         break;
       case ("GET", "/workout-manager"):
-        if (auth.level < 2) {
+        if (!auth.isAtLeastMod) {
           request.forbidden();
         } else {
           request.respond(basePage(WorkoutManagerComponents.main(), auth));
         }
         break;
       case ("POST", "/api/add-member"):
-        if (auth.level < 5) {
+        if (!auth.isAdmin) {
           request.forbidden();
         } else {
           final member = await ApiService.addMember(request);
@@ -84,30 +63,62 @@ Future<void> run() async {
         }
         break;
       case ("GET", "/member-manager"):
-        if (auth.level < 5) {
+        if (!auth.isAdmin) {
           request.forbidden();
         } else {
           request.respond(basePage(MemberManagerComponents.main(), auth));
         }
         break;
-      case ("POST", "/api/delete-member"):
-        if (auth.level < 5) {
-          request.forbidden();
-        } else {
-          await ApiService.removeMember(request);
-          request.respond(UtilityComponents.empty());
-        }
-        break;
-      case ("POST", "/api/delete-transaction"):
-        if (auth.level < 5) {
-          request.forbidden();
-        } else {
-          await ApiService.removeTransaction(request);
-          request.respond(UtilityComponents.empty());
-        }
-        break;
+    }
+    bool handled = await handleApiRequest(request, auth);
+    if (!handled) {
+      request.notFound();
     }
   }
+}
+
+Future<bool> handleApiRequest(HttpRequest request, Authentication auth) async {
+  switch ((request.method, request.uri.path)) {
+    case ("POST", "/api/delete-member"):
+      if (!auth.isAdmin) {
+        request.forbidden();
+      } else {
+        await ApiService.removeMember(request);
+        request.respond(UtilityComponents.empty());
+      }
+      return true;
+    case ("POST", "/api/delete-transaction"):
+      if (!auth.isAdmin) {
+        request.forbidden();
+      } else {
+        await ApiService.removeTransaction(request);
+        request.respond(UtilityComponents.empty());
+      }
+      return true;
+    case ("POST", "/api/add-transaction"):
+      if (!auth.isAtLeastMod) {
+        request.forbidden();
+      } else {
+        final transaction = await ApiService.addTransaction(request);
+        if (transaction == null) {
+          request.respondClientError();
+        } else {
+          final info = TransactionInfoService.toInfo(transaction);
+          request
+              .respond(TransactionComponents.transactionToManagableRow(info));
+        }
+      }
+      return true;
+    case ("POST", "/api/add-workout"):
+      if (!auth.isAtLeastMod) {
+        request.forbidden();
+      } else {
+        final workoutInfo = await ApiService.addWorkout(request);
+        request.respond(WorkoutManagerComponents.infoToRow(workoutInfo));
+      }
+      return true;
+  }
+  return false;
 }
 
 Future<void> handleAuthRequest(HttpRequest request) async {
@@ -117,7 +128,7 @@ Future<void> handleAuthRequest(HttpRequest request) async {
   final password = data.getStringValue("password");
   final auth = Authentication.fromAuthString("$username:$password");
   request.response.statusCode = 200;
-  if (auth.level >= 1) {
+  if (auth.isAtLeastUser) {
     request.response.headers.add("Set-Cookie",
         "username=$username; Domain=${Global.domain}; ${Global.domain == "localhost" ? "" : "Secure"}; Path=/; HttpOnly");
     request.response.headers.add("Set-Cookie",
@@ -142,6 +153,13 @@ extension on HttpRequest {
 
   void forbidden() {
     response.statusCode = 403;
+    response.close();
+  }
+
+  void notFound() {
+    response.headers.add("Content-Type", "text/html");
+    response.statusCode = 404;
+    response.write("<html><body><h1> 404 </h1></body></html>");
     response.close();
   }
 }
