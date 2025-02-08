@@ -1,4 +1,5 @@
 import 'package:tgm/domain/date_utils.dart';
+import 'package:tgm/domain/login/authentication.dart';
 import 'package:tgm/domain/member.dart';
 import 'package:tgm/domain/member_repository.dart';
 import 'package:tgm/domain/transaction/transaction_info.dart';
@@ -69,7 +70,7 @@ class TransactionComponents {
       """);
   }
 
-  static HTML manageTransactions() {
+  static HTML manageTransactions(Authentication auth) {
     final List<Member> members = MemberRepository.getAll();
     return HTML("""
 <h1> New Transaction </h1>
@@ -138,7 +139,7 @@ class TransactionComponents {
   </div>
   <input style="margin-top: 8px;" type="submit" value="Submit"/>
 </form>
-${managableHistory().render()}
+${auth.isAdmin ? managableHistory().render() : history().render()}
 """);
   }
 }

@@ -29,52 +29,61 @@ Future<void> run() async {
       request.respond(loginPage());
       continue;
     }
-    switch ((request.method, request.uri.path)) {
-      case ("GET", "/"):
-        request.respond(basePage(OverviewComponents.main(), auth));
-        break;
-      case ("GET", "/workouts"):
-        request.respond(basePage(WorkoutManagerComponents.overview(), auth));
-        break;
-      case ("GET", "/transactions"):
-        request.respond(basePage(TransactionComponents.history(), auth));
-        break;
-      case ("GET", "/transactions-manager"):
-        if (!auth.isAtLeastMod) {
-          request.forbidden();
-        } else {
-          request.respond(
-              basePage(TransactionComponents.manageTransactions(), auth));
-        }
-        break;
-      case ("GET", "/workout-manager"):
-        if (!auth.isAtLeastMod) {
-          request.forbidden();
-        } else {
-          request.respond(basePage(WorkoutManagerComponents.main(), auth));
-        }
-        break;
-      case ("POST", "/api/add-member"):
-        if (!auth.isAdmin) {
-          request.forbidden();
-        } else {
-          final member = await ApiService.addMember(request);
-          request.respond(MemberManagerComponents.memberToRow(member));
-        }
-        break;
-      case ("GET", "/member-manager"):
-        if (!auth.isAdmin) {
-          request.forbidden();
-        } else {
-          request.respond(basePage(MemberManagerComponents.main(), auth));
-        }
-        break;
+    bool handled = await handleUiRequest(request, auth);
+    if (handled) {
+      continue;
     }
-    bool handled = await handleApiRequest(request, auth);
-    if (!handled) {
-      request.notFound();
+    handled = await handleApiRequest(request, auth);
+    if (handled) {
+      continue;
     }
+    request.notFound();
   }
+}
+
+Future<bool> handleUiRequest(HttpRequest request, Authentication auth) async {
+  switch ((request.method, request.uri.path)) {
+    case ("GET", "/"):
+      request.respond(basePage(OverviewComponents.main(), auth));
+      return true;
+    case ("GET", "/workouts"):
+      request.respond(basePage(WorkoutManagerComponents.overview(), auth));
+      return true;
+    case ("GET", "/transactions"):
+      request.respond(basePage(TransactionComponents.history(), auth));
+      return true;
+    case ("GET", "/transactions-manager"):
+      if (!auth.isAtLeastMod) {
+        request.forbidden();
+      } else {
+        request.respond(
+            basePage(TransactionComponents.manageTransactions(auth), auth));
+      }
+      return true;
+    case ("GET", "/workout-manager"):
+      if (!auth.isAtLeastMod) {
+        request.forbidden();
+      } else {
+        request.respond(basePage(WorkoutManagerComponents.main(), auth));
+      }
+      return true;
+    case ("POST", "/api/add-member"):
+      if (!auth.isAdmin) {
+        request.forbidden();
+      } else {
+        final member = await ApiService.addMember(request);
+        request.respond(MemberManagerComponents.memberToRow(member));
+      }
+      return true;
+    case ("GET", "/member-manager"):
+      if (!auth.isAdmin) {
+        request.forbidden();
+      } else {
+        request.respond(basePage(MemberManagerComponents.main(), auth));
+      }
+      return true;
+  }
+  return false;
 }
 
 Future<bool> handleApiRequest(HttpRequest request, Authentication auth) async {
