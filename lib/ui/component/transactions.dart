@@ -13,10 +13,10 @@ class TransactionComponents {
 <h1> Transaction History </h1>
 <table>
   <tr id="transaction-history-headline">
-    <td> Affected Member</td>
-    <td>Type</td>
-    <td>Reason</td>
-    <td>Timestamp</td>
+    <th> Affected Member</th>
+    <th>Type</th>
+    <th>Reason</th>
+    <th>Timestamp</th>
   </tr>
   ${transactions.map((it) => transactionToRow(it).render()).join("\n")}
 </table>
@@ -29,11 +29,11 @@ class TransactionComponents {
 <h1> Transaction History </h1>
 <table>
   <tr id="transaction-history-headline">
-    <td>Delete</td>
-    <td>Affected Member</td>
-    <td>Type</td>
-    <td>Reason</td>
-    <td>Timestamp</td>
+    <th>Delete</th>
+    <th>Affected Member</th>
+    <th>Type</th>
+    <th>Reason</th>
+    <th>Timestamp</th>
   </tr>
   ${transactions.map((it) => transactionToManagableRow(it).render()).join("\n")}
 </table>

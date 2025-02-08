@@ -28,13 +28,14 @@ ${workoutHistory().render()}
   }
 
   static HTML overview() {
-    final infos = WorkoutInfoService.getAll();
+    final List<WorkoutInfo> infos = WorkoutInfoService.getAll();
+    infos.sort((a, b) => b.timestamp.isBefore(a.timestamp) ? 0 : 1);
     return HTML("""
 <h1> Workout-History </h1>
 <table>
   <tr id="workout-history-heading">
-    <td>Name</td>
-    <td>Date</td>
+    <th>Name</th>
+    <th>Date</th>
   </tr>
   ${infos.map((it) => infoToRow(it).render()).join("\n")}
 </table>
@@ -43,12 +44,13 @@ ${workoutHistory().render()}
 
   static HTML workoutHistory() {
     final infos = WorkoutInfoService.getAll();
+    infos.sort((a, b) => b.timestamp.isBefore(a.timestamp) ? 0 : 1);
     return HTML("""
 <h2> History </h2>
 <table>
   <tr id="workout-history-heading">
-    <td>Name</td>
-    <td>Date</td>
+    <th>Name</th>
+    <th>Date</th>
   </tr>
   ${infos.map((it) => infoToRow(it).render()).join("\n")}
 </table>

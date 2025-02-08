@@ -7,6 +7,7 @@ import 'package:tgm/ui/html.dart';
 class OverviewComponents {
   static HTML main() {
     final List<MemberInfo> memberInfos = OverviewService.getAllMemberInfos();
+    memberInfos.sort((a, b) => b.workouts - a.workouts);
     final Budget budget = BudgetRepository.get();
     return HTML("""
 <h1> Overview </h1>
