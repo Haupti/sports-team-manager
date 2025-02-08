@@ -53,7 +53,7 @@ class RoleComponents {
 <form hx-post="/api/add-role" hx-swap="beforeend" hx-target="#role-overview-table">
   <div>
     <label for="role-input"> Role</label>
-    <input id="role-input" type="text" name="name"/>
+    <input id="role-input" type="text" name="name" required/>
   </div>
   <div>
     <label for="user-input"> Role</label>

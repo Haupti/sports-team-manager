@@ -7,6 +7,7 @@ import 'package:tgm/domain/login/authentication.dart';
 import 'package:tgm/domain/role/role.dart';
 import 'package:tgm/domain/transaction/transaction_info_service.dart';
 import 'package:tgm/global.dart';
+import 'package:tgm/ui/component/budget_components.dart';
 import 'package:tgm/ui/component/member_manager.dart';
 import 'package:tgm/ui/component/overview.dart';
 import 'package:tgm/ui/component/role_components.dart';
@@ -56,6 +57,13 @@ Future<bool> handleUiRequest(HttpRequest request, Authentication auth) async {
       return true;
     case ("GET", "/roles"):
       request.respond(basePage(RoleComponents.roleInfoPage(), auth));
+      return true;
+    case ("GET", "/manage-budget"):
+      if (!auth.isAdmin) {
+        request.forbidden();
+      } else {
+        request.respond(basePage(BudgetComponents.managementView(), auth));
+      }
       return true;
     case ("GET", "/transactions-manager"):
       if (!auth.isAtLeastMod) {
@@ -124,6 +132,14 @@ Future<bool> handleApiRequest(HttpRequest request, Authentication auth) async {
         request.forbidden();
       } else {
         await ApiService.removeRole(request);
+        request.respond(UtilityComponents.empty());
+      }
+      return true;
+    case ("POST", "/api/set-budget"):
+      if (!auth.isAdmin) {
+        request.forbidden();
+      } else {
+        await ApiService.setBudget(request);
         request.respond(UtilityComponents.empty());
       }
       return true;

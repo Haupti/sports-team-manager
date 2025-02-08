@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:tgm/api/form_data.dart';
+import 'package:tgm/domain/budget/budget.dart';
+import 'package:tgm/domain/budget/budget_repository.dart';
 import 'package:tgm/domain/logger.dart';
 import 'package:tgm/domain/member.dart';
 import 'package:tgm/domain/member_repository.dart';
@@ -92,5 +94,11 @@ class ApiService {
         MemberRepository.getById(memberId) ??
             Logger.fallback(
                 "[ADD-ROLE]: $memberId not found", Member.deleted(memberId)));
+  }
+
+  static Future<void> setBudget(HttpRequest request) async {
+    final formData = await _formData(request);
+    BudgetRepository.set(
+        Budget(double.parse(formData.getStringValue("value"))));
   }
 }

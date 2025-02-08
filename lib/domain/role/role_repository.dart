@@ -35,7 +35,7 @@ class RoleRepository {
     final entities = transactions
         .map((it) => {
               "id": it.id,
-              "name": it.name,
+              "name" : it.name,
               "memberId": it.memberId,
             })
         .toList();

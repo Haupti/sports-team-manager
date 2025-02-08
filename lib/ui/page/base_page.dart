@@ -45,6 +45,7 @@ HTML body(HTML main, Authentication auth) {
     ${auth.isAtLeastMod ? """<a class="navLink" href="/workout-manager">Manage-Workouts</a>""" : ""}
     ${auth.isAdmin ? """<a class="navLink" href="/role-manager">Manage-Roles</a>""" : ""}
     ${auth.isAdmin ? """<a class="navLink" href="/member-manager">Manage-Members</a>""" : ""}
+    ${auth.isAdmin ? """<a class="navLink" href="/manage-budget">Manage-Budget</a>""" : ""}
     </div>
   </details>
   """ : ""}
