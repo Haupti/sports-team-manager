@@ -48,6 +48,7 @@ HTML body(HTML main, Authentication auth) {
     </div>
   </details>
   """ : ""}
+  <a class="navLink" hx-get="/logout">Logout</a>
 </nav>
 <main>
   ${main.render()}

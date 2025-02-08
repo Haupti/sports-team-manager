@@ -100,6 +100,9 @@ Future<bool> handleUiRequest(HttpRequest request, Authentication auth) async {
 
 Future<bool> handleApiRequest(HttpRequest request, Authentication auth) async {
   switch ((request.method, request.uri.path)) {
+    case ("GET", "/logout"):
+      handleLogoutRequest(request);
+      return true;
     case ("POST", "/api/delete-member"):
       if (!auth.isAdmin) {
         request.forbidden();
@@ -167,11 +170,21 @@ Future<void> handleAuthRequest(HttpRequest request) async {
   request.response.statusCode = 200;
   if (auth.isAtLeastUser) {
     request.response.headers.add("Set-Cookie",
-        "username=$username; Domain=${Global.domain}; ${Global.domain == "localhost" ? "" : "Secure"}; Path=/; HttpOnly");
+        "username=$username; Domain=${Global.domain}; ${Global.domain == "localhost" ? "" : "Secure"}; Path=/; HttpOnly; SameSite=Lax;");
     request.response.headers.add("Set-Cookie",
-        "password=$password; Domain=${Global.domain}; ${Global.domain == "localhost" ? "" : "Secure"}; Path=/; HttpOnly");
+        "password=$password; Domain=${Global.domain}; ${Global.domain == "localhost" ? "" : "Secure"}; Path=/; HttpOnly; SameSite=Lax;");
     request.response.headers.add("HX-Refresh", "true");
   }
+  request.response.close();
+}
+
+void handleLogoutRequest(HttpRequest request) {
+  request.response.statusCode = 200;
+  request.response.headers.add("Set-Cookie",
+      "username= ; Expires=Thu, 01 Jan 1970 00:00:01 GMT; Domain=${Global.domain}; ${Global.domain == "localhost" ? "" : "Secure"}; Path=/; HttpOnly; SameSite=Lax;");
+  request.response.headers.add("Set-Cookie",
+      "password= ; Expires=Thu, 01 Jan 1970 00:00:01 GMT; Domain=${Global.domain}; ${Global.domain == "localhost" ? "" : "Secure"}; Path=/; HttpOnly; SameSite=Lax;");
+  request.response.headers.add("HX-Refresh", "true");
   request.response.close();
 }
 
