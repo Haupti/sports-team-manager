@@ -35,6 +35,7 @@ HTML body(HTML main, Authentication auth) {
   <a class="navLink" class="navLink" href="/roles">Roles</a>
   <div style="display: flex; flex-wrap: wrap; gap: 8px;">
     ${auth.isAdmin ? """<a class="navLink" href="/member-manager">Manage-Members</a>""" : ""}
+    ${auth.isAdmin ? """<a class="navLink" href="/role-manager">Manage-Roles</a>""" : ""}
     ${auth.isAtLeastMod ? """<a class="navLink" href="/transactions-manager">Manage-Fines</a> """ : ""}
     ${auth.isAtLeastMod ? """<a class="navLink" href="/workout-manager">Manage-Workouts</a>""" : ""}
   </div>

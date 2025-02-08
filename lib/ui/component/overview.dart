@@ -1,3 +1,4 @@
+import 'package:tgm/domain/budget/budget.dart';
 import 'package:tgm/domain/budget/budget_repository.dart';
 import 'package:tgm/domain/overview/member_info.dart';
 import 'package:tgm/domain/overview/overview_service.dart';
@@ -6,10 +7,10 @@ import 'package:tgm/ui/html.dart';
 class OverviewComponents {
   static HTML main() {
     final List<MemberInfo> memberInfos = OverviewService.getAllMemberInfos();
-    final double budget = BudgetRepository.getCurrent();
+    final Budget budget = BudgetRepository.get();
     return HTML("""
 <h1> Overview </h1>
-<p><strong> Current budget $budget </strong></p>
+<p><strong> Current budget ${budget.value} </strong></p>
 <table>
   <tr>
     <th>

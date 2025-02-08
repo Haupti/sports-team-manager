@@ -5,6 +5,8 @@ import 'package:tgm/api/form_data.dart';
 import 'package:tgm/domain/logger.dart';
 import 'package:tgm/domain/member.dart';
 import 'package:tgm/domain/member_repository.dart';
+import 'package:tgm/domain/role/role.dart';
+import 'package:tgm/domain/role/role_repository.dart';
 import 'package:tgm/domain/transaction/transaction.dart';
 import 'package:tgm/domain/transaction/transaction_repository.dart';
 import 'package:tgm/domain/workout/workout.dart';
@@ -27,7 +29,7 @@ class ApiService {
   static Future<Transaction?> addTransaction(HttpRequest request) async {
     final formData = await _formData(request);
     final type = formData.getStringValue("type");
-    if(formData.getStringValue("member-id") == "--"){
+    if (formData.getStringValue("member-id") == "--") {
       return null;
     }
     Transaction t;
@@ -72,5 +74,23 @@ class ApiService {
         MemberRepository.getById(memberId) ??
             Logger.fallback("[ADD-WORKOUT]: $memberId not found",
                 Member.deleted(memberId)));
+  }
+
+  static Future<void> removeRole(HttpRequest request) async {
+    final formData = await _formData(request);
+    RoleRepository.delete(formData.getStringValue("id"));
+  }
+
+  static Future<RoleInfo> addRole(HttpRequest request) async {
+    final formData = await _formData(request);
+    final memberId = formData.getStringValue("member-id");
+    final name = formData.getStringValue("name");
+    final role = Role.create(name, memberId);
+    RoleRepository.add(role);
+    return RoleInfo(
+        role,
+        MemberRepository.getById(memberId) ??
+            Logger.fallback(
+                "[ADD-ROLE]: $memberId not found", Member.deleted(memberId)));
   }
 }

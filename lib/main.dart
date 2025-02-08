@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:tgm/api/api_service.dart';
 import 'package:tgm/api/form_data.dart';
 import 'package:tgm/domain/login/authentication.dart';
+import 'package:tgm/domain/role/role.dart';
 import 'package:tgm/domain/transaction/transaction_info_service.dart';
 import 'package:tgm/global.dart';
 import 'package:tgm/ui/component/member_manager.dart';
 import 'package:tgm/ui/component/overview.dart';
+import 'package:tgm/ui/component/role_components.dart';
 import 'package:tgm/ui/component/transactions.dart';
 import 'package:tgm/ui/component/utilities.dart';
 import 'package:tgm/ui/component/workout_manager.dart';
@@ -52,6 +54,9 @@ Future<bool> handleUiRequest(HttpRequest request, Authentication auth) async {
     case ("GET", "/transactions"):
       request.respond(basePage(TransactionComponents.history(), auth));
       return true;
+    case ("GET", "/roles"):
+      request.respond(basePage(RoleComponents.roleInfoPage(), auth));
+      return true;
     case ("GET", "/transactions-manager"):
       if (!auth.isAtLeastMod) {
         request.forbidden();
@@ -82,6 +87,13 @@ Future<bool> handleUiRequest(HttpRequest request, Authentication auth) async {
         request.respond(basePage(MemberManagerComponents.main(), auth));
       }
       return true;
+    case ("GET", "/role-manager"):
+      if (!auth.isAdmin) {
+        request.forbidden();
+      } else {
+        request.respond(basePage(RoleComponents.roleManagementPage(), auth));
+      }
+      return true;
   }
   return false;
 }
@@ -102,6 +114,22 @@ Future<bool> handleApiRequest(HttpRequest request, Authentication auth) async {
       } else {
         await ApiService.removeTransaction(request);
         request.respond(UtilityComponents.empty());
+      }
+      return true;
+    case ("POST", "/api/delete-role"):
+      if (!auth.isAdmin) {
+        request.forbidden();
+      } else {
+        await ApiService.removeRole(request);
+        request.respond(UtilityComponents.empty());
+      }
+      return true;
+    case ("POST", "/api/add-role"):
+      if (!auth.isAdmin) {
+        request.forbidden();
+      } else {
+        final RoleInfo info = await ApiService.addRole(request);
+        request.respond(RoleComponents.roleInfoToManagableRow(info));
       }
       return true;
     case ("POST", "/api/add-transaction"):
