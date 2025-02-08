@@ -10,7 +10,7 @@ class OverviewComponents {
     final Budget budget = BudgetRepository.get();
     return HTML("""
 <h1> Overview </h1>
-<p><strong> Current budget ${budget.value} </strong></p>
+<div style="font-size: 32px; display: flex; align-items: center; gap: 8px; padding-bottom: 8px;">&#128176;<p style="padding: 0; margin: 0;"><strong>${budget.value} &#8364;</strong></p></div>
 <table>
   <tr>
     <th>
