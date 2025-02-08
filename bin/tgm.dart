@@ -17,5 +17,10 @@ void main(List<String> arguments) async {
     domain = arguments[0];
   }
   Global.domain = domain;
+  Global.port = 8080;
+
+  print("Started on port : ${Global.port}");
+  print("Started with domain: ${Global.domain}");
+  print("Started with DATA_PATH: ${Global.dataPath}");
   await run();
 }

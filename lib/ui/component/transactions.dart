@@ -16,6 +16,7 @@ class TransactionComponents {
     <th> Affected Member</th>
     <th>Type</th>
     <th>Reason</th>
+    <th>Amount</th>
     <th>Timestamp</th>
   </tr>
   ${transactions.map((it) => transactionToRow(it).render()).join("\n")}
@@ -33,6 +34,7 @@ class TransactionComponents {
     <th>Affected Member</th>
     <th>Type</th>
     <th>Reason</th>
+    <th>Amount</th>
     <th>Timestamp</th>
   </tr>
   ${transactions.map((it) => transactionToManagableRow(it).render()).join("\n")}
@@ -54,6 +56,7 @@ class TransactionComponents {
   <td>${info.memberName}</td>
   <td>${info.type.name}</td>
   <td>${info.reason}</td>
+  <td>${info.amount}</td>
   <td>${info.timestamp.prettyDate()}</td>
 </tr>
       """);
@@ -65,6 +68,7 @@ class TransactionComponents {
   <td>${info.memberName}</td>
   <td>${info.type.name}</td>
   <td>${info.reason}</td>
+  <td>${info.amount}</td>
   <td>${info.timestamp.prettyDate()}</td>
 </tr>
       """);

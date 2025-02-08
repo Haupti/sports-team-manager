@@ -10,4 +10,5 @@ class TransactionInfo {
   DateTime get timestamp => transaction.timestamp;
   String get reason => transaction.reason;
   TransactionType get type => transaction.type;
+  double get amount => transaction.amount;
 }

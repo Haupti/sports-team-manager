@@ -19,7 +19,7 @@ import 'package:tgm/ui/page/base_page.dart';
 import 'package:tgm/ui/page/login_page.dart';
 
 Future<void> run() async {
-  final server = await HttpServer.bind(InternetAddress.anyIPv4, 3000);
+  final server = await HttpServer.bind(InternetAddress.anyIPv4, Global.port);
   await for (HttpRequest request in server) {
     switch ((request.method, request.uri.path)) {
       case ("POST", "/api/login"):
