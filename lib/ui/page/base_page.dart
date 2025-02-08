@@ -31,14 +31,23 @@ HTML body(HTML main, Authentication auth) {
   <a style="font-size: 36px;" href="/">&#127952; TGM H4</a>
   <a class="navLink" href="/">Home</a>
   <a class="navLink" class="navLink" href="/transactions">Fines</a>
-  <a class="navLink" class="navLink" href="/workouts">Workouts</a>
-  <a class="navLink" class="navLink" href="/roles">Roles</a>
-  <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-    ${auth.isAdmin ? """<a class="navLink" href="/member-manager">Manage-Members</a>""" : ""}
-    ${auth.isAdmin ? """<a class="navLink" href="/role-manager">Manage-Roles</a>""" : ""}
+  <details class="navLinks" style="position: relative;">
+    <summary class="menu"> More </summary>
+    <div class="navLinks" style="position: absolute; background-color: white; padding: 8px; border: 1px solid #e0e0e0;">
+      <a class="navLink" class="navLink" href="/workouts">Workouts</a>
+      <a class="navLink" class="navLink" href="/roles">Roles</a>
+    </div>
+  </details>
+  ${auth.isAtLeastMod ? """<details class="navLinks" style="position: relative;">
+    <summary class="menu"> Management </summary>
+    <div class="navLinks" style="position: absolute; background-color: white; padding: 8px; border: 1px solid #e0e0e0;">
     ${auth.isAtLeastMod ? """<a class="navLink" href="/transactions-manager">Manage-Fines</a> """ : ""}
     ${auth.isAtLeastMod ? """<a class="navLink" href="/workout-manager">Manage-Workouts</a>""" : ""}
-  </div>
+    ${auth.isAdmin ? """<a class="navLink" href="/role-manager">Manage-Roles</a>""" : ""}
+    ${auth.isAdmin ? """<a class="navLink" href="/member-manager">Manage-Members</a>""" : ""}
+    </div>
+  </details>
+  """ : ""}
 </nav>
 <main>
   ${main.render()}
@@ -67,6 +76,11 @@ HTML style() {
   }
   nav a:visited {
     color: #017dc7;
+  }
+  .navLinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; 
   }
   nav {
     display: flex;
@@ -146,6 +160,10 @@ HTML style() {
       opacity: 0; 
       display: none;
     }
+  }
+  .menu {
+    color: #017dc7;
+    cursor: pointer;
   }
 """);
 }
