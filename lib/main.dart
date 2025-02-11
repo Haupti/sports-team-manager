@@ -160,8 +160,9 @@ Future<bool> handleApiRequest(HttpRequest request, Authentication auth) async {
           request.respondClientError();
         } else {
           final info = TransactionInfoService.toInfo(transaction);
-          request
-              .respond(TransactionComponents.transactionToManagableRow(info));
+          request.respond(auth.isAdmin
+              ? TransactionComponents.transactionToManagableRow(info)
+              : TransactionComponents.transactionToRow(info));
         }
       }
       return true;
