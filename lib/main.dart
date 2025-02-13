@@ -7,6 +7,7 @@ import 'package:tgm/domain/login/authentication.dart';
 import 'package:tgm/domain/role/role.dart';
 import 'package:tgm/domain/transaction/transaction_info_service.dart';
 import 'package:tgm/global.dart';
+import 'package:tgm/logging.dart';
 import 'package:tgm/ui/component/budget_components.dart';
 import 'package:tgm/ui/component/member_manager.dart';
 import 'package:tgm/ui/component/overview.dart';
@@ -21,26 +22,30 @@ import 'package:tgm/ui/page/login_page.dart';
 Future<void> run() async {
   final server = await HttpServer.bind(InternetAddress.anyIPv4, Global.port);
   await for (HttpRequest request in server) {
-    switch ((request.method, request.uri.path)) {
-      case ("POST", "/api/login"):
-        await handleAuthRequest(request);
-        continue;
-    }
+    try {
+      switch ((request.method, request.uri.path)) {
+        case ("POST", "/api/login"):
+          await handleAuthRequest(request);
+          continue;
+      }
 
-    final auth = Authentication.from(request.headers);
-    if (auth.isUnauthorized) {
-      request.respond(loginPage());
-      continue;
+      final auth = Authentication.from(request.headers);
+      if (auth.isUnauthorized) {
+        request.respond(loginPage());
+        continue;
+      }
+      bool handled = await handleUiRequest(request, auth);
+      if (handled) {
+        continue;
+      }
+      handled = await handleApiRequest(request, auth);
+      if (handled) {
+        continue;
+      }
+      request.notFound();
+    } catch (e) {
+      FileLogger.logErrors(e);
     }
-    bool handled = await handleUiRequest(request, auth);
-    if (handled) {
-      continue;
-    }
-    handled = await handleApiRequest(request, auth);
-    if (handled) {
-      continue;
-    }
-    request.notFound();
   }
 }
 
