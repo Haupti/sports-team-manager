@@ -4,7 +4,7 @@ import 'package:tgm/global.dart';
 
 class FileLogger {
   static File logfile = () {
-    final file = File("{$Global.dataPath}/error.logs");
+    final file = File("${Global.dataPath}/error.logs");
     if (!file.existsSync()) {
       file.createSync();
     }
