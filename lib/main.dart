@@ -43,8 +43,8 @@ Future<void> run() async {
         continue;
       }
       request.notFound();
-    } catch (e) {
-      FileLogger.logErrors(e);
+    } on Exception catch (e) {
+      FileLogger.logError(e);
     }
   }
 }
