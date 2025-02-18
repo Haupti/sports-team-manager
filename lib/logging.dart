@@ -11,9 +11,15 @@ class FileLogger {
     return file;
   }();
 
-  static void logError(Exception exception) {
+  static void logError(Error exception) {
     logfile.writeAsStringSync(
-        "[${DateTime.now().toIso8601String()}] EXCEPTION: '${exception.toString()}'",
+        "[${DateTime.now().toIso8601String()}] ERROR: '${exception.toString()}'\n",
+        mode: FileMode.append);
+  }
+
+  static void logException(Exception exception) {
+    logfile.writeAsStringSync(
+        "[${DateTime.now().toIso8601String()}] EXCEPTION: '${exception.toString()}'\n",
         mode: FileMode.append);
   }
 }

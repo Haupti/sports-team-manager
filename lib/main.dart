@@ -44,6 +44,8 @@ Future<void> run() async {
       }
       request.notFound();
     } on Exception catch (e) {
+      FileLogger.logException(e);
+    } on Error catch (e) {
       FileLogger.logError(e);
     }
   }
