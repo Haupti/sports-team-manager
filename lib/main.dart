@@ -45,8 +45,10 @@ Future<void> run() async {
       request.notFound();
     } on Exception catch (e) {
       FileLogger.logException(e);
+      request.serverError();
     } on Error catch (e) {
       FileLogger.logError(e);
+      request.serverError();
     }
   }
 }
@@ -234,6 +236,12 @@ extension on HttpRequest {
     response.headers.add("Content-Type", "text/html");
     response.statusCode = 404;
     response.write("<html><body><h1> 404 </h1></body></html>");
+    response.close();
+  }
+  void serverError() {
+    response.headers.add("Content-Type", "text/html");
+    response.statusCode = 500;
+    response.write("<html><body><h1> 500 </h1></body></html>");
     response.close();
   }
 }
