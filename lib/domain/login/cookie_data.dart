@@ -2,7 +2,14 @@ import 'dart:collection';
 
 class CookieData {
   final HashMap<String, String> parsed;
-  CookieData(String raw) : parsed = CookieData.parse(raw);
+  CookieData._internal(this.parsed);
+  static CookieData? from(String raw) {
+    final result = CookieData._parse(raw);
+    if (result == null) {
+      return null;
+    }
+    return CookieData._internal(result);
+  }
 
   String getStringValue(String valueName) {
     return parsed[valueName]!;
@@ -12,13 +19,13 @@ class CookieData {
     return parsed[valueName];
   }
 
-  static HashMap<String, String> parse(String raw) {
+  static HashMap<String, String>? _parse(String raw) {
     final Iterable<List<String>> pairs =
         raw.split(";").map((it) => it.trim().split("="));
     final HashMap<String, String> dataParsed = HashMap.from({});
     for (final pair in pairs) {
       if (pair.length != 2) {
-        throw "ERROR: malformed cookie data";
+        return null;
       }
       dataParsed[pair[0]] = pair[1];
     }

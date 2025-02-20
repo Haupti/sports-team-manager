@@ -38,7 +38,10 @@ class Authentication {
     if (cookie == null) {
       return Authentication(Level.unauthorized);
     }
-    final cookieData = CookieData(cookie);
+    final cookieData = CookieData.from(cookie);
+    if (cookieData == null) {
+      return Authentication(Level.unauthorized);
+    }
     final username = cookieData.getStringValueOrNull("username");
     final password = cookieData.getStringValueOrNull("password");
     if (username == null || password == null) {
