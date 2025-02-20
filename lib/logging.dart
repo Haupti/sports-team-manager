@@ -22,4 +22,10 @@ class FileLogger {
         "[${DateTime.now().toIso8601String()}] EXCEPTION: '${exception.toString()}'\n",
         mode: FileMode.append);
   }
+
+  static void logAny(Object e) {
+    logfile.writeAsStringSync(
+        "[${DateTime.now().toIso8601String()}] SOMETHING WENT WRONG: '${e.toString()}'\n",
+        mode: FileMode.append);
+  }
 }

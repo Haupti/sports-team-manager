@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:tgm/logging.dart';
 import 'package:tgm/main.dart';
 import 'package:tgm/global.dart';
 
@@ -22,5 +23,9 @@ void main(List<String> arguments) async {
   print("Started on port : ${Global.port}");
   print("Started with domain: ${Global.domain}");
   print("Started with DATA_PATH: ${Global.dataPath}");
+  try {
   await run();
+  } catch (e) {
+      FileLogger.logAny(e);
+  }
 }
