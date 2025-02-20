@@ -46,7 +46,7 @@ class ApiService {
           t = Transaction.createSettlement(formData.getStringValue("member-id"),
               formData.getDoubleValue("amount"));
         default:
-          throw "unknown type";
+          throw Exception("unknown type");
       }
       TransactionRepository.add(t);
       return t;
